@@ -1,12 +1,12 @@
 import { Table, Space } from "antd";
 import { Student } from "src/types";
-import type { AnyObject } from 'antd/es/_util/type';
-import type { SorterResult } from 'antd/es/table/interface';
-import type { GetProp, TableProps } from 'antd';
 import { useState } from "react";
+import type { TablePaginationConfig, TableProps } from 'antd';
+import Filter from "../Filter";
 
-
-type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
+interface StudentsTableProps {
+  students: Student[];
+}
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -15,9 +15,6 @@ interface TableParams {
   // filters?: Record<string, FilterValue | null>;
 }
 
-interface StudentsTableProps {
-  students: Student[];
-}
 
 export default function StudentsTable({ students }: StudentsTableProps) {
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -26,15 +23,25 @@ export default function StudentsTable({ students }: StudentsTableProps) {
       pageSize: 10,
       showSizeChanger: true,
       pageSizeOptions: ['10', '20', '50', '100'],
-      total: 0,
     },
   });
   
+  const [degreeFilter, setDegreeFilter] = useState<number | null>(null);
+
+  const filteredData = degreeFilter
+    ? students.filter(student => student.degreeId === degreeFilter)
+    : students;
+
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'RA', dataIndex: 'ra', key: 'ra' },
     { title: 'Nome', dataIndex: 'name', key: 'name' },
-    { title: 'Grau', dataIndex: 'degreeId', key: 'degreeId' },
+    { 
+      title: 'Grau', 
+      dataIndex: 'degreeId', 
+      key: 'degreeId',
+      render: (degreeId: number) => `Grau ${degreeId}`
+    },
     { title: 'Classe', dataIndex: 'classId', key: 'classId' },
   ];
 
@@ -49,16 +56,21 @@ export default function StudentsTable({ students }: StudentsTableProps) {
     });
   };
 
-
   return (
     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+      <Filter 
+        students={students}
+        value={degreeFilter}
+        onChange={setDegreeFilter}
+      />
+      
       <Table<Student>
-        dataSource={students} 
+        dataSource={filteredData} 
         columns={columns} 
         rowKey="id"
         pagination={{
           ...tableParams.pagination,
-          total: students.length,
+          total: filteredData.length,
         }}
         onChange={handleTableChange}
         scroll={{ x: true }}
