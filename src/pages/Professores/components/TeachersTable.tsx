@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { TablePaginationConfig, TableProps } from 'antd';
 import { degreesData, classesData, mattersData } from "src/constants/constants";
 import { degreeRenderFunction, classesRenderFuncion } from "src/services/teacherUtils";
+import TeacherDegreeFilter from "./TeacherDegreeFilter";
 import "src/styles.css"
 
 const { Title } = Typography
@@ -23,6 +24,7 @@ interface TableParams {
 
 
 export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) {
+  
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -31,12 +33,12 @@ export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) 
       pageSizeOptions: ['10', '20', '50', '100'],
     },
   });
-
+  
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'Nome', dataIndex: 'name', key: 'name' },
     { 
-			title: 'Matéria',
+      title: 'Matéria',
 			dataIndex: 'matterId',
 			key: 'matterId',
 			render: (matterId: number) => mattersData.find(md => md.id == matterId)?.name || ""
@@ -48,7 +50,7 @@ export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) 
       render: (degrees: Degree[]) => degreeRenderFunction(degrees)
 		},
   ];
-
+  
   const expandedRowRender = (teacher: Teacher) => {
     return (
       <div style={{ padding: 16 }}>
@@ -73,14 +75,21 @@ export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) 
     );
   };
 
-  const handleRowClick = (record: Teacher) => ({
-    onClick: () => onEdit(record),
-  });  
-
+  const [degreeFilter, setDegreeFilter] = useState<number | null>(null);
+  
+  const filteredTeachers = degreeFilter 
+    ? teachers.filter(teacher => teacher.degrees.some(degree => degree.degreeId === degreeFilter)) 
+    : teachers;
+  
   return (
     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+      <TeacherDegreeFilter
+        teachers={teachers}
+        value={degreeFilter}
+        onChange={setDegreeFilter}
+      />      
       <Table<Teacher>
-        dataSource={teachers} 
+        dataSource={filteredTeachers} 
         columns={columns} 
         rowKey="id"
         expandable={{
