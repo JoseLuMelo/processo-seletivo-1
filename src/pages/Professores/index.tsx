@@ -17,7 +17,7 @@ export default function EstudantesPage() {
 
 
   return (
-    <Card title="Lista de Estudantes" style={{ margin: '24px' }}>
+    <Card title="Lista de Professores" style={{ margin: '24px' }}>
       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
         {/* <ActionsToolbar 
           onAddTeachers={handleAddTeachers} 

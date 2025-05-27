@@ -1,7 +1,8 @@
 // src/services/teacherUtils.ts
-import { Teacher } from "src/types";
+import { Teacher, Degree } from "src/types";
 import teachersData from "src/constants/Teste-Front-End/teachers.json";
 import relationshipsData from "src/constants/Teste-Front-End/relationships.json";
+import degrees from "src/constants/Teste-Front-End/degrees.json"
 
 export const getCombinedTeachersData = (): Teacher[] => {
   return teachersData.map(teacher => {
@@ -36,3 +37,20 @@ export const getCombinedTeachersData = (): Teacher[] => {
     };
   });
 };
+
+export const degreeRenderFunction = (degrees: Degree[]) => {
+  return degrees.reduce((accumulator, degree) => {
+    return accumulator 
+      ? `${accumulator}, ${getDegreeName(degree.degreeId)}` 
+      : getDegreeName(degree.degreeId);
+  }, '')
+}
+
+const getDegreeName = (degreeId: number) => {
+  return degrees.find(dd => dd.id == degreeId)?.name || ''
+}
+
+export const classesRenderFuncion = (degrees: Degree[]) => {
+  const x = degrees.flatMap(d => d.classes)
+  return x;
+}

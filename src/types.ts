@@ -7,8 +7,8 @@ interface Student {
 }
 
 interface Degree {
-  id: number;
-  name: string;
+  degreeId: number;
+  classes: { classId: number}[]
 }
 
 interface Teacher {

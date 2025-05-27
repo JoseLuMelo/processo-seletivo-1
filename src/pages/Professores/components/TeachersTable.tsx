@@ -1,10 +1,13 @@
 // src\pages\Professores\components\TeachersTable.tsx
-import { Table, Space } from "antd";
-import { Teacher } from "src/types";
+import { Table, Space, Tag, Typography } from "antd";
+import { Teacher, Degree } from "src/types";
 import { useState } from "react";
 import type { TablePaginationConfig, TableProps } from 'antd';
 import { degreesData, classesData, mattersData } from "src/constants/constants";
+import { degreeRenderFunction, classesRenderFuncion } from "src/services/teacherUtils";
 import "src/styles.css"
+
+const { Title } = Typography
 
 interface TeachersTableProps {
   teachers: Teacher[];
@@ -28,36 +31,46 @@ export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) 
       pageSizeOptions: ['10', '20', '50', '100'],
     },
   });
-  
-  const [degreeFilter, setDegreeFilter] = useState<number | null>(null);
-  const [classFilter, setClassFilter] = useState<number | null>(null);
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
-    { title: 'Id Professor', dataIndex: 'teacherId', key: 'teacherId' },
     { title: 'Nome', dataIndex: 'name', key: 'name' },
     { 
-        title: 'Matéria',
-        dataIndex: 'matterId',
-        key: 'matterId',
-        render: (matterId: number) => mattersData.find(md => md.id == matterId)?.name || ""
+			title: 'Matéria',
+			dataIndex: 'matterId',
+			key: 'matterId',
+			render: (matterId: number) => mattersData.find(md => md.id == matterId)?.name || ""
     },
-    { title: 'Classes',
-      dataIndex: 'classId',
-      key: 'classId',
-      render: (classId: number) => classesData[classId] || ''
-    },
+		{
+			title: 'Graus',
+			dataIndex: 'degrees',
+			key: 'degrees',
+      render: (degrees: Degree[]) => degreeRenderFunction(degrees)
+		},
   ];
 
-  const handleTableChange: TableProps<Teacher>['onChange'] = (
-    pagination,
-    filters,
-    sorter,
-    extra
-  ) => {
-    setTableParams({
-      pagination,
-    });
+  const expandedRowRender = (teacher: Teacher) => {
+    return (
+      <div style={{ padding: 16 }}>
+        <Title level={5} style={{ marginBottom: 16 }}>Detalhes de Graus e Classes</Title>
+        
+        {teacher.degrees.map((degree, index) => (
+          <div key={index} style={{ marginBottom: 24 }}>
+            <div style={{ fontWeight: 'bold', marginBottom: 8 }}>
+              {degreesData.find(d => d.id === degree.degreeId)?.name || `Grau ${degree.degreeId}`}
+            </div>
+            
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {degree.classes.map((cls, clsIndex) => (
+                <Tag key={clsIndex} color="geekblue">
+                  {classesData[cls.classId] || `Classe ${cls.classId}`}
+                </Tag>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const handleRowClick = (record: Teacher) => ({
@@ -70,13 +83,15 @@ export default function StudentsTable({ teachers, onEdit }: TeachersTableProps) 
         dataSource={teachers} 
         columns={columns} 
         rowKey="id"
-        onRow={handleRowClick}
+        expandable={{
+          expandedRowRender,
+          rowExpandable: (teacher) => teacher.degrees.length > 0,
+        }}
         pagination={{
           ...tableParams.pagination,
+          total: teachers.length,
         }}
-        onChange={handleTableChange}
         scroll={{ x: true }}
-        rowClassName="cursor-pointer hover:bg-gray-50"
       />
     </Space>
   );
