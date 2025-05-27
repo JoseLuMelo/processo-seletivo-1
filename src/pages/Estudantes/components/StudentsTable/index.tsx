@@ -3,12 +3,13 @@ import { Table, Space } from "antd";
 import { Student } from "src/types";
 import { useState } from "react";
 import type { TablePaginationConfig, TableProps } from 'antd';
-import DegreeFilter from "../Filter/DegreeFilter";
 import Filter from "../Filter";
 import { degreesData, classesData } from "src/constants/constants";
+import "src/styles.css"
 
 interface StudentsTableProps {
   students: Student[];
+  onEdit: (student: Student) => void;
 }
 
 interface TableParams {
@@ -19,7 +20,7 @@ interface TableParams {
 }
 
 
-export default function StudentsTable({ students }: StudentsTableProps) {
+export default function StudentsTable({ students, onEdit }: StudentsTableProps) {
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -67,6 +68,10 @@ export default function StudentsTable({ students }: StudentsTableProps) {
     });
   };
 
+  const handleRowClick = (record: Student) => ({
+    onClick: () => onEdit(record),
+  });  
+
   return (
     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
       <Filter 
@@ -81,12 +86,14 @@ export default function StudentsTable({ students }: StudentsTableProps) {
         dataSource={filteredData} 
         columns={columns} 
         rowKey="id"
+        onRow={handleRowClick}
         pagination={{
           ...tableParams.pagination,
           total: filteredData.length,
         }}
         onChange={handleTableChange}
         scroll={{ x: true }}
+        rowClassName="cursor-pointer hover:bg-gray-50"
       />
     </Space>
   );
