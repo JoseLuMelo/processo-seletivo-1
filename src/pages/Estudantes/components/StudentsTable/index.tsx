@@ -1,7 +1,9 @@
+// src\pages\Estudantes\components\StudentsTable\index.tsx
 import { Table, Space } from "antd";
 import { Student } from "src/types";
 import { useState } from "react";
 import type { TablePaginationConfig, TableProps } from 'antd';
+import DegreeFilter from "../Filter/DegreeFilter";
 import Filter from "../Filter";
 import { degreesData, classesData } from "src/constants/constants";
 
@@ -28,10 +30,14 @@ export default function StudentsTable({ students }: StudentsTableProps) {
   });
   
   const [degreeFilter, setDegreeFilter] = useState<number | null>(null);
+  const [classFilter, setClassFilter] = useState<number | null>(null);
 
-  const filteredData = degreeFilter
-    ? students.filter(student => student.degreeId === degreeFilter)
-    : students;
+
+  const filteredData = students.filter(student => {
+    const matchesDegree = degreeFilter ? student.degreeId === degreeFilter : true;
+    const matchesClass = classFilter ? student.classId === classFilter : true;
+    return matchesDegree && matchesClass;
+  });
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -65,8 +71,10 @@ export default function StudentsTable({ students }: StudentsTableProps) {
     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
       <Filter 
         students={students}
-        value={degreeFilter}
-        onChange={setDegreeFilter}
+        degreeValue={degreeFilter}
+        classValue={classFilter}
+        onDegreeChange={setDegreeFilter}
+        onClassChange={setClassFilter}
       />
       
       <Table<Student>

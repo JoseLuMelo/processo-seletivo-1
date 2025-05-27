@@ -1,30 +1,36 @@
-// src/pages/Estudantes/components/DegreeFilter/index.tsx
-import { Select } from "antd";
+// src/pages/Estudantes/components/Filter/index.tsx
+import { Space } from "antd";
 import { Student } from "src/types";
-import { degreesData } from "src/constants/constants";
+import DegreeFilter from "./DegreeFilter";
+import ClassFilter from "./ClassFilter";
 
-interface DegreeFilterProps {
+interface FilterProps {
   students: Student[];
-  value?: number | null;
-  onChange: (value: number | null) => void;
+  degreeValue?: number | null;
+  classValue?: number | null;
+  onDegreeChange: (value: number | null) => void;
+  onClassChange: (value: number | null) => void;
 }
 
-export default function DegreeFilter({ students, value, onChange }: DegreeFilterProps) {
-  const degreeOptions = Array.from(new Set(students.map(s => s.degreeId)))
-    .sort((a, b) => a - b)
-    .map(degreeId => ({
-      value: degreeId,
-      label: degreesData.find(dd => dd.id == degreeId)?.name || ''
-    }));
-
+export default function Filter({
+  students,
+  degreeValue,
+  classValue,
+  onDegreeChange,
+  onClassChange
+}: FilterProps) {
   return (
-    <Select
-      placeholder="Filtrar por Grau"
-      options={degreeOptions}
-      allowClear
-      style={{ width: 200 }}
-      onChange={onChange}
-      value={value}
-    />
+    <Space>
+      <DegreeFilter 
+        students={students}
+        value={degreeValue}
+        onChange={onDegreeChange}
+      />
+      <ClassFilter
+        students={students}
+        value={classValue}
+        onChange={onClassChange}
+      />
+    </Space>
   );
 }
