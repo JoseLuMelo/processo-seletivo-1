@@ -1,6 +1,7 @@
 // src/pages/Estudantes/components/DegreeFilter/index.tsx
 import { Select } from "antd";
 import { Student } from "src/types";
+import { degreesData } from "src/constants/constants";
 
 interface DegreeFilterProps {
   students: Student[];
@@ -13,7 +14,7 @@ export default function DegreeFilter({ students, value, onChange }: DegreeFilter
     .sort((a, b) => a - b)
     .map(degreeId => ({
       value: degreeId,
-      label: `Grau ${degreeId}`
+      label: degreesData.find(dd => dd.id == degreeId)?.name || ''
     }));
 
   return (

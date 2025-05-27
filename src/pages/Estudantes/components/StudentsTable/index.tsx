@@ -3,6 +3,7 @@ import { Student } from "src/types";
 import { useState } from "react";
 import type { TablePaginationConfig, TableProps } from 'antd';
 import Filter from "../Filter";
+import { degreesData, classesData } from "src/constants/constants";
 
 interface StudentsTableProps {
   students: Student[];
@@ -40,9 +41,13 @@ export default function StudentsTable({ students }: StudentsTableProps) {
       title: 'Grau', 
       dataIndex: 'degreeId', 
       key: 'degreeId',
-      render: (degreeId: number) => `Grau ${degreeId}`
+      render: (degreeId: number) => degreesData.find(dd => dd.id == degreeId)?.name || ''
     },
-    { title: 'Classe', dataIndex: 'classId', key: 'classId' },
+    { title: 'Classe',
+      dataIndex: 'classId',
+      key: 'classId',
+      render: (classId: number) => classesData[classId] || ''
+    },
   ];
 
   const handleTableChange: TableProps<Student>['onChange'] = (

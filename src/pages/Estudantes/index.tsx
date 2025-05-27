@@ -1,6 +1,6 @@
 // src/pages/Estudantes/index.tsx
 import { useState, useEffect } from "react";
-import studentsData from "src/Teste-Front-End/students.json";
+import { studentsData } from "src/constants/constants"
 import { Card, Space } from "antd";
 import StudentsTable from "./components/StudentsTable";
 import ActionsToolbar from "./components/ActionsToolbar";

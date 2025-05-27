@@ -6,4 +6,9 @@ interface Student {
   classId: number;
 }
 
+interface Degree {
+  id: number;
+  name: string;
+}
+
 export type { Student }

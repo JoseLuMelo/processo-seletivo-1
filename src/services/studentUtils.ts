@@ -10,7 +10,7 @@ export const generateMockStudents = (existingStudents: Student[], count = 300): 
     id: lastId + i + 1,
     ra: Math.floor(Math.random() * 90000) + 10000,
     name: `Aluno ${lastId + i + 1}`,
-    degreeId: Math.floor(Math.random() * 5) + 1,  // Graus 1-5
-    classId: Math.floor(Math.random() * 10) + 1   // Classes 1-10
+    degreeId: Math.floor(Math.random() * 12) + 1,  // Graus 1-5
+    classId: Math.floor(Math.random() * 5) + 1   // Classes 1-6
   }));
 };
