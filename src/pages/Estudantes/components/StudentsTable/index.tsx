@@ -36,7 +36,7 @@ export default function StudentsTable({ students, onEdit }: StudentsTableProps) 
 
   const filteredData = students.filter(student => {
     const matchesDegree = degreeFilter ? student.degreeId === degreeFilter : true;
-    const matchesClass = classFilter ? student.classId === classFilter : true;
+    const matchesClass = classFilter != null ? student.classId === classFilter : true;
     return matchesDegree && matchesClass;
   });
 
