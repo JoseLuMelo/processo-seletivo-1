@@ -11,4 +11,17 @@ interface Degree {
   name: string;
 }
 
-export type { Student }
+interface Teacher {
+  id: number;
+  teacherId: number;
+  name: string;
+  matterId: number;
+  degrees: {
+    degreeId: number;
+    classes: {
+      classId: number;
+    }[];
+  }[];
+}
+
+export type { Student, Degree, Teacher }

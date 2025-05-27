@@ -7,7 +7,7 @@ import teachersJson from './Teste-Front-End/teachers.json'
 
 const classesData: string[] = classesJson.classes.map(c => c.name)
 const degreesData: {id: number, name: string}[] = degreesJson
-const mattersData: string[] = mattersJson.map(m => m.name)
+const mattersData: {id: number, name: string}[] = mattersJson
 // const relationships = relationshipsJson
 const studentsData = studentsJson;
 const teachersData: {id: number, name: string}[] = teachersJson
