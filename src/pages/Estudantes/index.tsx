@@ -7,6 +7,8 @@ import ActionsToolbar from "./components/ActionsToolbar";
 import EditStudentModal from "./components/EditModal";
 import { Student } from "src/types";
 import { generateMockStudents } from "src/services/studentUtils";
+import StudentsBarChart from "./components/StudentsBarChart";
+
 
 export default function EstudantesPage() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -47,6 +49,7 @@ export default function EstudantesPage() {
           students={students} 
           onEdit={setEditingStudent}
         />
+        <StudentsBarChart students={students} />
       </Space>
 
       <EditStudentModal

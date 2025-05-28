@@ -11,7 +11,6 @@ export default function EstudantesPage() {
   
   useEffect(() => {
     const combinedData = getCombinedTeachersData();
-    console.log("combinedData: ", combinedData)
     setTeachers(combinedData);
   }, []);
 
