@@ -31,9 +31,14 @@ export default function StudentsBarChart({ students }: StudentsBarChartProps) {
 				labelFormatter: (degreeId: number) => degreesData.find(dd => dd.id == degreeId)?.name || ''
 			}
     },
-    legend: {
-      position: 'top-right',
-    },
+		label: {
+			text: 'count',
+			style: {
+        textAlign: 'right',
+        fill: '#fff',
+        dx: -5
+			}
+		},
     height: 400,
   };
 
